@@ -1,6 +1,6 @@
 To do:  
 part 1:  
-make class Board  
+~~make class Board~~  
 make class Piece  
 put piece shapes somehow (different classes of shapes inheriting from class Piece)  
 implement gravity  

@@ -16,8 +16,17 @@ class Piece:
         self.minDist = pieceShapes[self.numberOfRotations+1]
         
         # Position
-        self.pos = (0,0)                      # (w, h)
+        self.pos = (0,-self.minDist[self.rot][1]-1)                      # (w, h)
 
-    def moveLeft(self):
-        print(self.boardShape)
+    def fall(self):
+        self.pos = (self.pos[0], self.pos[1]+1)             
+
+    def left(self):
+        self.pos = (self.pos[0]-1, self.pos[1]+1)
+
+    def right(self):
+        self.pos = (self.pos[0]+1, self.pos[1]+1)
+
+    def drop(self):
+        pass
         

@@ -9,11 +9,11 @@ class Piece:
         
         # Block Variables
         self.rot = 0
-        pieceShapes = blocks[shape]
-        self.currShape = pieceShapes[self.rot]
-        self.numberOfRotations = len(pieceShapes) - 2
-        self.maxDist = pieceShapes[self.numberOfRotations]
-        self.minDist = pieceShapes[self.numberOfRotations+1]
+        self.pieceShapes = blocks[shape]
+        self.currShape = self.pieceShapes[self.rot]
+        self.numberOfRotations = len(self.pieceShapes) - 2
+        self.maxDist = self.pieceShapes[self.numberOfRotations]
+        self.minDist = self.pieceShapes[self.numberOfRotations+1]
         
         # Position
         self.pos = (0,-self.minDist[self.rot][1]-1)                      # (w, h)
@@ -29,4 +29,16 @@ class Piece:
 
     def drop(self):
         pass
+
+    def rotateL(self):
+        self.rot = (self.rot+1) % self.numberOfRotations
+        self.currShape = self.pieceShapes[self.rot]
+
+    def rotateR(self):
+        self.rot = (self.rot-1) % self.numberOfRotations
+        self.currShape = self.pieceShapes[self.rot]
+
+    def rotate180(self):
+        self.rot = (self.rot+2) % self.numberOfRotations
+        self.currShape = self.pieceShapes[self.rot]
         

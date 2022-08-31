@@ -14,22 +14,9 @@ class Board:
 
         self.possiblePieces = ['O', 'T', 'I', 'L', 'J', 'S', 'Z']
         
-        self.piece = Piece(self.board, 'T')
+        self.piece = Piece(self.board, 'I')
         self.holdPiece = None
 
-    def update(self, move):      
-        self.move_handler(move)
-        self.piece.fall()
-        for x, y in self.piece.currShape:
-            self.board[y+self.piece.pos[1]][x+self.piece.pos[0]] = 1
-        
-        print(self.board)
-        time.sleep(0.5)
-        os.system('clear')
-
-        for x, y in self.piece.currShape:
-            self.board[y+self.piece.pos[1]][x+self.piece.pos[0]] = 0
-        
     def move_handler(self, move):
         match move:
             case 'Left':
@@ -37,7 +24,7 @@ class Board:
             case 'Right':
                 self.piece.right()
             case 'Down':
-                self.piece.down()
+                self.piece.fall()
             case 'Drop':
                 self.piece.drop()
             case 'RotateL':
@@ -54,5 +41,21 @@ class Board:
                     temp = self.piece
                     self.piece = self.holdPiece
                     self.holdPiece = temp
+
+    def update(self, move):      
+        self.move_handler(move)
+        self.piece.fall()
+        
+
+    def show(self):
+
+        os.system('clear')
+        for x, y in self.piece.currShape:
+            self.board[y+self.piece.pos[1]][x+self.piece.pos[0]] = 1
+
+        print(self.board)
+
+        for x, y in self.piece.currShape:
+            self.board[y+self.piece.pos[1]][x+self.piece.pos[0]] = 0
 
 

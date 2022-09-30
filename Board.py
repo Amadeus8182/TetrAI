@@ -1,7 +1,4 @@
-from turtle import color
 import numpy as np
-import os
-import time
 from Piece import Piece
 from random import choice
 import pygame as pg
@@ -15,11 +12,13 @@ class Board:
         self.grav = gravity
         self.WIN = surface
         self.possiblePieces = ['O', 'T', 'I', 'L', 'J', 'S', 'Z']
-        
+
         self.piece = Piece(self.board, choice(self.possiblePieces), 48)
+        # self.piece = Piece(self.board, 'I', 48)
+        self.canHold = True
         self.holdPiece = None
 
-    def move_handler(self, move=None):
+    def inpMove(self, move=None):
         match move:
             case 'Left':
                 self.piece.left()
@@ -36,21 +35,38 @@ class Board:
             case 'Rotate180':
                 self.piece.rotate180()
             case 'Hold':
-                if self.holdPiece == None:
-                    self.holdPiece = self.piece
-                    self.piece = Piece(self.board, choice(self.possiblePieces), 30)
-                else:
-                    temp = self.piece
-                    self.piece = self.holdPiece
-                    self.holdPiece = temp
+                if self.canHold:
+                    self.holdHandler()
+                    self.canHold = False
+                
+    def holdHandler(self):
+        if self.holdPiece == None:
+            self.holdPiece = self.piece
+            self.piece = Piece(self.board, choice(self.possiblePieces), 30)
+        else:
+            self.piece, self.holdPiece = self.holdPiece, self.piece
 
-    def inpMove(self, move):      
-        self.move_handler(move)
+        self.holdPiece.resetPos()
 
     def update(self, frame):
-        if frame == 32:
-            self.piece.fall()
+        self.piece.update(frame)
+        if self.piece.lifetime <= 0:
+            self.setPiece()
+            self.canHold = True
+            self.piece = Piece(self.board, choice(self.possiblePieces), 30)
 
+    def setPiece(self):
+        for x, y in self.piece.currShape:
+            xPos = x+self.piece.pos[0]
+            yPos = y+self.piece.pos[1]
+            if yPos >= 0:
+                self.board[yPos][xPos] = 1
+
+    def checkLineClear(self):
+        for row in self.board:
+            if len(set(row)) == 1:
+                row.fill(0)
+                
     def show(self):
         for x, y in self.piece.currShape:
             xPos = x+self.piece.pos[0]
@@ -81,5 +97,3 @@ class Board:
         
         pg.display.flip()
         pg.display.update()
-
-
